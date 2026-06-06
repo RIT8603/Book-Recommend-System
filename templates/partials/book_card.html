@@ -1,0 +1,27 @@
+<div class="col-sm-6 col-lg-4 col-xl-3">
+    <a class="book-card-link" href="{{ url_for('book_details', isbn=book.isbn) }}">
+        <article class="book-card h-100">
+            <div class="book-cover-wrap">
+                <img class="book-cover" src="{{ book.image }}" alt="{{ book.title }} cover" loading="lazy">
+            </div>
+            <div class="book-card-body">
+                <h3>{{ book.title }}</h3>
+                <p class="book-author">{{ book.author }}</p>
+                {% if book.num_ratings is defined %}
+                    <div class="rating-row">
+                        <span><i class="bi bi-people-fill"></i> {{ book.num_ratings }}</span>
+                        <span><i class="bi bi-star-fill"></i> {{ book.avg_ratings }}</span>
+                    </div>
+                {% else %}
+                    <p class="book-meta">{{ book.publisher }}</p>
+                    {% if book.similarity_score is defined %}
+                        <div class="rating-row">
+                            <span><i class="bi bi-activity"></i> {{ book.confidence }}%</span>
+                            <span>score {{ book.similarity_score }}</span>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </article>
+    </a>
+</div>

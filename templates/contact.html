@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us | Book Recommendation System{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <span class="eyebrow">Contact Us</span>
+        <h1 class="fw-bold mt-3">Send us your inquiry</h1>
+        <p class="lead">Submissions are stored in your Supabase table when the Supabase URL and public anon or publishable key are configured.</p>
+    </div>
+</section>
+
+<section class="section-pad pt-4">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-5">
+                <div class="info-panel h-100">
+                    <h2 class="h4">Contact information</h2>
+                    <p>Questions about recommendations, data, or the app experience? Reach out here.</p>
+                    <div class="contact-line"><i class="bi bi-envelope"></i><span>support@bookrecommender.local</span></div>
+                    <div class="contact-line"><i class="bi bi-telephone"></i><span>+1 (555) 014-BOOK</span></div>
+                    <div class="contact-line"><i class="bi bi-geo-alt"></i><span>Digital Library Desk, Reading Avenue, CA</span></div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <form class="contact-form" action="{{ url_for('contact') }}" method="post">
+                    <div class="mb-3">
+                        <label class="form-label" for="name">Name</label>
+                        <input class="form-control form-control-lg" id="name" name="name" type="text" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="email">Email</label>
+                        <input class="form-control form-control-lg" id="email" name="email" type="email" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label" for="message">Message</label>
+                        <textarea class="form-control" id="message" name="message" rows="6" required></textarea>
+                    </div>
+                    <button class="btn btn-accent btn-lg loading-button" type="submit">
+                        <span class="button-text">Submit Message</span>
+                        <span class="spinner-border spinner-border-sm d-none" aria-hidden="true"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

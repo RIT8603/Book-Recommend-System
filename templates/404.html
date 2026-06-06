@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found | Book Recommendation System{% endblock %}
+
+{% block content %}
+<section class="page-header text-center">
+    <div class="container">
+        <span class="eyebrow">404</span>
+        <h1 class="fw-bold mt-3">Page not found</h1>
+        <p class="lead">The page you requested does not exist.</p>
+        <a class="btn btn-accent btn-lg" href="{{ url_for('index') }}">Return Home</a>
+    </div>
+</section>
+{% endblock %}

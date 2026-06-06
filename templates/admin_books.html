@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Books | Book Recommendation System{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <span class="eyebrow">Admin Panel</span>
+        <h1 class="fw-bold mt-3">Supabase Books</h1>
+        <p class="lead">View, search, edit, and delete books stored permanently in the database.</p>
+    </div>
+</section>
+
+<section class="section-pad pt-4">
+    <div class="container">
+        {% if supabase_error %}
+            <div class="alert alert-danger">{{ supabase_error }}</div>
+        {% endif %}
+
+        <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-4">
+            <form class="admin-search d-flex" method="get">
+                <input class="form-control" name="q" value="{{ query }}" placeholder="Fuzzy search Supabase books">
+                <button class="btn btn-accent ms-2" type="submit">Search</button>
+            </form>
+            <div class="d-flex gap-2">
+                <a class="btn btn-outline-light" href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                <a class="btn btn-accent" href="{{ url_for('admin_book_new') }}">Add Book</a>
+            </div>
+        </div>
+
+        <div class="table-responsive admin-table-wrap">
+            <table class="table table-dark table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>ISBN</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Year</th>
+                        <th>Publisher</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in books %}
+                        <tr>
+                            <td>{{ book.isbn }}</td>
+                            <td>{{ book.book_title }}</td>
+                            <td>{{ book.book_author }}</td>
+                            <td>{{ book.year_of_publication }}</td>
+                            <td>{{ book.publisher }}</td>
+                            <td class="text-end">
+                                <a class="btn btn-sm btn-outline-light" href="{{ url_for('admin_book_edit', isbn=book.isbn) }}">Edit</a>
+                                <form class="d-inline delete-form" action="{{ url_for('admin_book_delete', isbn=book.isbn) }}" method="post">
+                                    <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="6" class="text-center text-muted py-4">No books found in Supabase.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <div class="text-muted">Page {{ page }}</div>
+            <div class="d-flex gap-2">
+                {% if page > 1 %}
+                    <a class="btn btn-outline-light" href="{{ url_for('admin_books', q=query, page=page - 1) }}">Previous</a>
+                {% endif %}
+                {% if has_next %}
+                    <a class="btn btn-outline-light" href="{{ url_for('admin_books', q=query, page=page + 1) }}">Next</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

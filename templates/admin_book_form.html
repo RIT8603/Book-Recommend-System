@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}{% if mode == "edit" %}Edit Book{% else %}Add Book{% endif %} | Admin{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <span class="eyebrow">Admin Panel</span>
+        <h1 class="fw-bold mt-3">{% if mode == "edit" %}Edit Book{% else %}Add New Book{% endif %}</h1>
+        <p class="lead">Save catalog data in Supabase. Retrain the model after adding enough new book and rating data.</p>
+    </div>
+</section>
+
+<section class="section-pad pt-4">
+    <div class="container">
+        <form class="admin-form" method="post">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label" for="isbn">ISBN</label>
+                    <input class="form-control" id="isbn" name="isbn" value="{{ book.isbn or '' }}" {% if mode == "edit" %}readonly{% endif %} required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="year_of_publication">Publication Year</label>
+                    <input class="form-control" id="year_of_publication" name="year_of_publication" value="{{ book.year_of_publication or '' }}">
+                </div>
+                <div class="col-12">
+                    <label class="form-label" for="book_title">Book Title</label>
+                    <input class="form-control" id="book_title" name="book_title" value="{{ book.book_title or '' }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="book_author">Author</label>
+                    <input class="form-control" id="book_author" name="book_author" value="{{ book.book_author or '' }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="publisher">Publisher</label>
+                    <input class="form-control" id="publisher" name="publisher" value="{{ book.publisher or '' }}">
+                </div>
+                <div class="col-lg-4">
+                    <label class="form-label" for="image_url_s">Small Image URL</label>
+                    <input class="form-control" id="image_url_s" name="image_url_s" value="{{ book.image_url_s or '' }}">
+                </div>
+                <div class="col-lg-4">
+                    <label class="form-label" for="image_url_m">Medium Image URL</label>
+                    <input class="form-control" id="image_url_m" name="image_url_m" value="{{ book.image_url_m or '' }}">
+                </div>
+                <div class="col-lg-4">
+                    <label class="form-label" for="image_url_l">Large Image URL</label>
+                    <input class="form-control" id="image_url_l" name="image_url_l" value="{{ book.image_url_l or '' }}">
+                </div>
+            </div>
+            <div class="d-flex flex-wrap gap-3 mt-4">
+                <button class="btn btn-accent btn-lg loading-button" type="submit">
+                    <span class="button-text">Save Book</span>
+                    <span class="spinner-border spinner-border-sm d-none" aria-hidden="true"></span>
+                </button>
+                <a class="btn btn-outline-light btn-lg" href="{{ url_for('admin_books') }}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

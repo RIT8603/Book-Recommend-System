@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error | Book Recommendation System{% endblock %}
+
+{% block content %}
+<section class="page-header text-center">
+    <div class="container">
+        <span class="eyebrow">500</span>
+        <h1 class="fw-bold mt-3">Something went wrong</h1>
+        <p class="lead">Please try again after a moment.</p>
+        <a class="btn btn-accent btn-lg" href="{{ url_for('index') }}">Return Home</a>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}{{ book.title }} | Book Details{% endblock %}
+
+{% block content %}
+<section class="detail-section">
+    <div class="container">
+        <div class="detail-panel">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-4 text-center">
+                    <img class="detail-cover" src="{{ book.image }}" alt="{{ book.title }} cover">
+                </div>
+                <div class="col-lg-8">
+                    <span class="eyebrow">Book details</span>
+                    <h1 class="fw-bold mt-3">{{ book.title }}</h1>
+                    {% if model_message %}
+                        <div class="alert alert-warning mt-4">{{ model_message }}</div>
+                    {% endif %}
+                    <div class="detail-list mt-4">
+                        <div><strong>Author</strong><span>{{ book.author }}</span></div>
+                        <div><strong>Publisher</strong><span>{{ book.publisher }}</span></div>
+                        <div><strong>Publication Year</strong><span>{{ book.year }}</span></div>
+                        <div><strong>ISBN</strong><span>{{ book.isbn }}</span></div>
+                    </div>
+                    <div class="d-flex flex-wrap gap-3 mt-4">
+                        <a class="btn btn-accent btn-lg" href="{{ url_for('recommend', book=book.title) }}">Get Similar Books</a>
+                        <a class="btn btn-outline-light btn-lg" href="{{ url_for('index') }}">Back to Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

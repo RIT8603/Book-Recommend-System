@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Recommend | Book Recommendation System{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <span class="eyebrow">Search model</span>
+        <h1 class="fw-bold mt-3">Get Similar Book Recommendations</h1>
+        <p class="lead">Enter a book title that exists in your trained pivot table. Recommendations come from `pt.pkl`, `books.pkl`, and `similarity_scores.pkl`.</p>
+    </div>
+</section>
+
+<section class="section-pad pt-4">
+    <div class="container">
+        <div class="search-panel">
+            <form class="row g-3 align-items-end recommendation-form" action="{{ url_for('recommend') }}" method="post">
+                <div class="col-lg-9">
+                    <label class="form-label" for="book">Book name</label>
+                    <input class="form-control form-control-lg autocomplete-input" id="book" name="book" type="search" value="{{ book_name }}" placeholder="Try: 1984, The Notebook, Harry Potter..." list="bookSuggestions" autocomplete="off" required>
+                    <datalist id="bookSuggestions"></datalist>
+                </div>
+                <div class="col-lg-3 d-grid">
+                    <button class="btn btn-accent btn-lg loading-button" type="submit">
+                        <span class="button-text">Recommend</span>
+                        <span class="spinner-border spinner-border-sm d-none" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        {% if message %}
+            <div class="alert alert-warning mt-4">
+                <strong>{{ message }}</strong>
+                {% if suggestions %}
+                    <div class="mt-2">Did you mean:
+                        {% for suggestion in suggestions %}
+                            <a href="{{ url_for('recommend', book=suggestion) }}" class="alert-link">{{ suggestion }}</a>{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% if did_you_mean %}
+            <div class="alert alert-info mt-4">
+                Showing recommendations for <strong>{{ did_you_mean }}</strong>.
+            </div>
+        {% endif %}
+
+        {% if selected_book %}
+            <section class="result-section selected-book-section mt-5">
+                <div class="section-title">
+                    <span class="eyebrow">Searched Book</span>
+                    <h2>Your Selected Book</h2>
+                    <p>This is the exact model title used to generate recommendations.</p>
+                </div>
+                <a class="selected-book-card" href="{{ url_for('book_details', isbn=selected_book.isbn) }}">
+                    <div class="selected-cover-wrap">
+                        <img src="{{ selected_book.image }}" alt="{{ selected_book.title }} cover" loading="lazy">
+                    </div>
+                    <div class="selected-book-body">
+                        <h3>{{ selected_book.title }}</h3>
+                        <dl>
+                            <div>
+                                <dt>Author</dt>
+                                <dd>{{ selected_book.author }}</dd>
+                            </div>
+                            <div>
+                                <dt>Publisher</dt>
+                                <dd>{{ selected_book.publisher }}</dd>
+                            </div>
+                            <div>
+                                <dt>Year</dt>
+                                <dd>{{ selected_book.year }}</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </a>
+            </section>
+        {% endif %}
+
+        {% if debug_info and debug_info.matched_book %}
+            <div class="debug-panel mt-4">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <span>Searched book</span>
+                        <strong>{{ debug_info.searched_book }}</strong>
+                    </div>
+                    <div class="col-md-4">
+                        <span>Matched model title</span>
+                        <strong>{{ debug_info.matched_book }}</strong>
+                    </div>
+                    <div class="col-md-4">
+                        <span>pt.pkl index</span>
+                        <strong>{{ debug_info.book_index }}</strong>
+                    </div>
+                </div>
+                <div class="table-responsive mt-3">
+                    <table class="table table-sm table-dark align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Model index</th>
+                                <th>Title from pt.pkl</th>
+                                <th>Similarity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in debug_info.top_scores %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ item.index }}</td>
+                                    <td>{{ item.title }}</td>
+                                    <td>{{ item.score }} / {{ item.confidence }}%</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if recommendations %}
+            <section class="result-section recommended-books-section mt-5">
+                <div class="section-title">
+                    <span class="eyebrow">Recommended Books</span>
+                    <h2>Books You May Also Like</h2>
+                    <p>These books come only from the trained ML model similarity scores.</p>
+                </div>
+                <div class="row g-4">
+                    {% for book in recommendations %}
+                        {% include "partials/book_card.html" with context %}
+                    {% endfor %}
+                </div>
+            </section>
+        {% elif not book_name %}
+            <div class="empty-panel mt-4">
+                <i class="bi bi-search"></i>
+                <h2 class="h4">Search for a book to begin</h2>
+                <p>Use an exact or near-exact title from the trained recommendation model.</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
