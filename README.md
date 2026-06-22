@@ -17,7 +17,7 @@ A Flask-based book recommendation web app powered by a trained collaborative-fil
 
 This project serves book recommendations using model artifacts stored in `Model/`, with a Supabase backend that powers the admin dashboard and the public contact form.
 
-**🔗 Live Website:** [book-recommend-system-1.onrender.com](https://book-recommend-system-1.onrender.com/)
+**🔗 Live Website:** [book-recommend-system-1.onrender.com](https://book-recommend-system-blsz.onrender.com/recommend)
 
 ---
 
